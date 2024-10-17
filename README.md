@@ -17,11 +17,11 @@ The MassieVFX Toolkit is a collection of tools designed to enhance your workflow
    - Locate or create the `init.py` file.
    - Add the following line to `init.py`:
      ```python
-     nuke.pluginAddPath('MassieVFX')
+     nuke.pluginAddPath('MassieVFX-NukeToolkit')
      ```
    - Save the `init.py` file.
 
-   **Note:** If there is no `init.py` file or if it doesn't contain the line `nuke.pluginAddPath('MassieVFX')`, Nuke won't detect the MassieVFX directories.
+   **Note:** If there is no `init.py` file or if it doesn't contain the line `nuke.pluginAddPath('MassieVFX-NukeToolkit')`, Nuke won't detect the MassieVFX directories.
 
 ## Final Steps
 
