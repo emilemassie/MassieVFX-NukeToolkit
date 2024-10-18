@@ -1,0 +1,14 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Dot {
+ name SmartDot
+ knobChanged "import nuke \nif nuke.thisKnob().name() == 'inputChange':\n\tnode = nuke.thisNode()\n\ttry:\n\t\tnode\['label'].setValue(\"<center><b style='color:green'>POINTING : </b><b>\" + node.input(0).name())\n\t\tnode\['tile_color'].setValue(10682623)\n\texcept:\n\t\tnode\['label'].setValue(\"<center><b style='color:red'>UNLINKED </b>\")\n\t\tnode\['tile_color'].setValue(4278190335)\n\n\t\n"
+ tile_color 0xff0000ff
+ label "<center><b style='color:red'>UNLINKED </b>"
+ note_font_size 15
+ note_font_color 0xffffffff
+ selected true
+ xpos -211
+ ypos -54
+ hide_input true
+}

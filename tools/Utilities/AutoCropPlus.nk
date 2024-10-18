@@ -1,0 +1,64 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+Group {
+ name AutoCropPlus
+ onCreate "\n\n#current_width = nuke.root()\[\"format\"].value().width()\n#current_height = nuke.root()\[\"format\"].value().height()\n#nuke.thisNode().node('AutoCropCore').knob('autocropdata').setValue(\[0,0,current_width,current_height])\n"
+ tile_color 0xa57aaaff
+ gl_color 0xa57aaaff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos -740
+ ypos 63
+ addUserKnob {20 Settings l "SETTINGS "}
+ addUserKnob {26 _1 l "<b style='color:#A57AAA;'>Channels to Analyse :" T <br><br>}
+ addUserKnob {41 channels l Channel T AutoCropCore.channels}
+ addUserKnob {26 ""}
+ addUserKnob {26 _2 l "<b style='color:#A57AAA;'>Adjust Final BBox :" T <br><br>}
+ addUserKnob {16 add_size l "(Add Pixels)" R 0 100}
+ addUserKnob {41 crop l "Black Outside" T AutoCropFinalCrop.crop}
+ addUserKnob {26 ""}
+ addUserKnob {41 go l "<b style='color:#A57AAA;'>RUN AUTOCROP" T AutoCropCore.go}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -40
+  ypos 350
+ }
+ Dot {
+  name Dot1
+  xpos -6
+  ypos 426
+ }
+set N8d136800 [stack 0]
+ Crop {
+  box {{parent.AutoCropCore.autocropdata-parent.add_size x1092 0} {parent.AutoCropCore.autocropdata-parent.add_size x1092 0} {parent.AutoCropCore.autocropdata+parent.add_size x1092 1938} {parent.AutoCropCore.autocropdata+parent.add_size x1092 1080}}
+  name AutoCropFinalCrop
+  gl_color 0xa57aaaff
+  selected true
+  xpos -40
+  ypos 566
+ }
+ Output {
+  name Output1
+  xpos -40
+  ypos 710
+ }
+push $N8d136800
+ Dot {
+  name Dot2
+  xpos -226
+  ypos 426
+ }
+ CurveTool {
+  operation "Auto Crop"
+  channels alpha
+  ROI {0 0 {parent.width} {parent.height}}
+  name AutoCropCore
+  gl_color 0xa57aaaff
+  xpos -260
+  ypos 560
+ }
+end_group

@@ -1,0 +1,18 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+NoOp {
+ name META_INFO
+ knobChanged "\n\nimport nuke, re\n\ndef setText():\n    n = nuke.thisNode()\n    text = ''\n    keywords = re.split(', |,|\\.', nuke.thisNode()\['keywords'].getValue())\n    for name in n.metadata():\n        meta = n.metadata()\[name]\n        name = name.split('/')\[-1].lower()\n        if any(word in name for word in keywords):\n            text = text + name.split('/')\[-1] + ': ' + str(meta)\n            if '/' in str(meta) and 'shutter' in name:\n                text = text + ' (' + str(24*360/int(meta.split('/')\[-1])) + '°)'\n            text = text + r'\\n'\n    nuke.thisNode()\['label'].setValue('\\n' + text)\ntry:\n    setText()\n    nuke.thisNode()\['note_font'].setValue('Verdana Regular')\n    nuke.thisNode()\['note_font_color'].setValue(4294967295)\nexcept:\n    nuke.thisNode()\['label'].setValue(r\"NO METADATA\")\n    nuke.thisNode()\['note_font'].setValue('Verdana Bold')\n    nuke.thisNode()\['note_font_color'].setValue(4278190335) \n\n"
+ tile_color 0xff
+ label "\n"
+ note_font "Verdana Regular"
+ note_font_size 10
+ note_font_color 0xffffffff
+ selected true
+ xpos -740
+ ypos -129
+ addUserKnob {20 User l FILTERS}
+ addUserKnob {1 keywords l "KEYWORDS : " t "Enter all keywords separated by a coma (,)"}
+ keywords "shutter, angle"
+}

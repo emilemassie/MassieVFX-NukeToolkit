@@ -1,0 +1,235 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+Group {
+ name QC_Grain_Checker
+ tile_color 0x75ffff
+ note_font "Bitstream Vera Sans Bold"
+ selected true
+ xpos -700
+ ypos 279
+ addUserKnob {20 User}
+ addUserKnob {4 checkerWhich l "Grain Checker" M {"Grain Checker 1" "Grain Checker 2"}}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x32542e00
+  label "Grain Checker 1"
+  note_font_size 42
+  xpos -679
+  ypos 920
+  bdwidth 223
+  bdheight 241
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x308ef000
+  label "Grain Checker 2"
+  note_font_size 42
+  xpos 81
+  ypos -30
+  bdwidth 1529
+  bdheight 957
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -546
+  ypos 46
+ }
+set N8dfa3c00 [stack 0]
+ Dot {
+  name Dot4
+  xpos 273
+  ypos 50
+ }
+set N8dfa3800 [stack 0]
+ Dot {
+  name Dot7
+  xpos 91
+  ypos 351
+ }
+ Dot {
+  name Dot8
+  xpos 91
+  ypos 901
+ }
+push $N8dfa3800
+ Colorspace {
+  name Colorspace5
+  xpos 233
+  ypos 347
+ }
+set N8dfa2c00 [stack 0]
+ Blur {
+  name Blur6
+  xpos 238
+  ypos 589
+ }
+push $N8dfa2c00
+ Blur {
+  size 1.7
+  name Blur7
+  xpos 383
+  ypos 591
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge3
+  xpos 238
+  ypos 747
+ }
+ Grade {
+  white 500
+  black_clamp false
+  name Grade3
+  xpos 238
+  ypos 797
+ }
+ Saturation {
+  saturation 3
+  name Saturation3
+  xpos 238
+  ypos 847
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy3
+  xpos 238
+  ypos 897
+ }
+push $N8dfa3800
+ Dot {
+  name Dot9
+  xpos 988
+  ypos 50
+ }
+set N8dfa1000 [stack 0]
+ Log2Lin {
+  operation lin2log
+  name Log2Lin3
+  xpos 1148
+  ypos 347
+ }
+ Dot {
+  name Dot10
+  xpos 1188
+  ypos 450
+ }
+set N8dfa0800 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1588
+  ypos 450
+ }
+ Dot {
+  name Dot13
+  xpos 1588
+  ypos 850
+ }
+push $N8dfa0800
+ Colorspace {
+  colorspace_out Cineon
+  name Colorspace6
+  xpos 1148
+  ypos 497
+ }
+set N8df3f800 [stack 0]
+ Blur {
+  name Blur8
+  xpos 1148
+  ypos 589
+ }
+push $N8df3f800
+ Blur {
+  size 1.7
+  name Blur9
+  xpos 1346
+  ypos 647
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge4
+  xpos 1148
+  ypos 697
+ }
+ Grade {
+  white 100
+  black_clamp false
+  name Grade4
+  xpos 1148
+  ypos 747
+ }
+ Saturation {
+  saturation 3
+  name Saturation4
+  xpos 1148
+  ypos 798
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy4
+  xpos 1148
+  ypos 847
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  name Max1
+  xpos 1148
+  ypos 897
+ }
+push $N8dfa1000
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus1
+  xpos 954
+  ypos 897
+ }
+push $N8dfa3c00
+ NoOp {
+  name NoOp1
+  xpos -546
+  ypos 1000
+ }
+set N8df3d400 [stack 0]
+push $N8df3d400
+ Blur {
+  channels rgba
+  size 2.6
+  name Blur1
+  xpos -669
+  ypos 1075
+ }
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge6
+  xpos -546
+  ypos 1075
+ }
+ ColorCorrect {
+  gain 9
+  name ColorCorrect1
+  xpos -546
+  ypos 1131
+ }
+ Switch {
+  inputs 2
+  which {{checkerWhich}}
+  name Switch1
+  label "\[value which]"
+  xpos 230
+  ypos 1125
+ }
+ Output {
+  name Output
+  xpos 230
+  ypos 1221
+ }
+end_group

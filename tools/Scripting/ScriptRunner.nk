@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+NoOp {
+ name ScriptRunner
+ selected true
+ xpos -799
+ ypos 212
+ hide_input true
+ addUserKnob {20 User}
+ addUserKnob {2 file l "FILES :"}
+ file X:/_staff_Folders/emile.massie/NukePythonCodes/SGPlateLoader.py
+ addUserKnob {26 ""}
+ addUserKnob {22 button l "<p style='margin:auto;'>run" T "import nuke\nfile = nuke.thisNode()\['file'].getValue()\nexec(open(file).read())" +STARTLINE}
+}

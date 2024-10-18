@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+NoOp {
+ name REF_ME
+ tile_color 0x8000ffff
+ note_font "DejaVu Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos -503
+ ypos 278
+ addUserKnob {20 tab l Info t "The fact you hovered here to see this tooltip is the proof you are one of the good ones."}
+ addUserKnob {26 info_text l " " T "<i>First, please connect this node to a cornerpin node <br>\nThen, press the button to add reference frame controls !!!</i>"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {22 python_button l "<b>REF ME !!!</b>" -STARTLINE T "def ref_cpin(node):\n    \"\"\" \n        This Tool takes a corner pin as an input and then references all the knobs to the desired frame.\n        This is very usefull when getting corner pins from mocha and/or wanting to change reference frame after the fact.\n    \"\"\"\n    import nuke\n    try :\n        if node.Class() == \"CornerPin2D\":\n            ref_frame = nuke.frame()\n            k = nuke.Int_Knob(\"rframe\", '<b>FRAME : ')\n            tab = nuke.Tab_Knob('reference_tab', 'REFERENCE FRAME')\n            \n            try:\n                node\['from1'].setExpression('to1(rframe)')\n                node\['from2'].setExpression('to2(rframe)')\n                node\['from3'].setExpression('to3(rframe)')\n                node\['from4'].setExpression('to4(rframe)')\n                node\['rframe'].setValue(ref_frame)\n                node\['label'].setValue('\[value rframe]')\n            except:\n                node.addKnob(tab)\n                node.addKnob(k)\n\n                node\['from1'].setExpression('to1(rframe)')\n                node\['from2'].setExpression('to2(rframe)')\n                node\['from3'].setExpression('to3(rframe)')\n                node\['from4'].setExpression('to4(rframe)')\n                node\['rframe'].setValue(ref_frame)\n                node\['label'].setValue('\[value rframe]')\n        else:\n            nuke.message('The connected node is not a CornerPin2D')\n    except:\n        nuke.message('Please connect a CornerPin2D')\n\nnode = nuke.thisNode().input(0)\nref_cpin(node)"}
+}

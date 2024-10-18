@@ -1,0 +1,27 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+NoOp {
+ name ROTO_IMPORTER
+ knobChanged "\nchannelList = \['all']\n\nfor layer in nuke.thisNode().channels():\n\n    if '.alpha' in layer and layer.split('.')\[0] != 'rgba':\n        channelList.append(layer.split('.')\[0])\n\nnuke.thisNode()\['channels'].setValues(channelList)\n"
+ tile_color 0x6600ff
+ note_font "Consolas Bold"
+ note_font_size 10
+ note_font_color 0xffffffff
+ selected true
+ xpos 1191
+ ypos -1624
+ addUserKnob {20 MenuItem l SETTINGS}
+ addUserKnob {26 _2 l "<b style='color:darkgreen;'>IMPORTER :" T " "}
+ addUserKnob {22 ImportButton l "<p>IMPORT ROTO" -STARTLINE T "from nuke_scene_content.collector.sg_collector import SGCollector\nfrom nuke_scene_content.collector.sg_collector import Collector\nfrom nuke_scene_content.nuke_funcs import insert\n\nfrom nuke_scene_content.collector.disk_collector import DiskCollector\nfrom nuke_scene_content.collector.disk_collector import Collector as DC\n\nnode = nuke.thisNode()\ncollector = SGCollector(Collector, insert)\n\n\nclass getRoto(nukescripts.PythonPanel):\n\n    def __init__(self):\n        nukescripts.PythonPanel.__init__(self, 'ROTO IMPORTER')\n\n        self.rotos = self.getRotoList()\n        self.List = nuke.Enumeration_Knob('List', 'IMPORT : ', self.rotos\[1])\n        self.space = nuke.Text_Knob('')\n\n        self.addKnob(self.List)\n        self.addKnob(self.space)\n\n    def getRotoList(self):\n        listRotos = \[\[],\[]]\n        \n\n        if node\['diskSearch'].value():\n            collector = SGCollector(Collector, insert)\n            collector.run(\['apr', 'hndoff'])\n        else:\n            collector = DiskCollector(DC, insert)\n            collector.run()\n            \n        keywords = \['roto', 'matte']\n\n        for i in collector.all_latest_elements:\n            if any(word in i.path for word in keywords):\n                listRotos\[0].append(i)\n                listRotos\[1].append(i.path.split('/')\[-1])\n\n        return \[listRotos\[0]\[::-1],listRotos\[1]\[::-1]]\n\n    def Import(self):\n        return collector.insert_element(self.rotos\[0]\[int(self.List.getValue())])\n        \np = getRoto()\nif p.showModalDialog():\n    readnode = p.Import()\n    readnode.setXYpos(node.xpos(), node.ypos()-200)\n    node.connectInput(0, readnode)\n    readnode.autoplace()\n\n\n\n\n"}
+ addUserKnob {26 spacer_1 l "" -STARTLINE T "    "}
+ addUserKnob {6 diskSearch l "Approved versions only" -STARTLINE}
+ diskSearch true
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "<b style='color:darkgreen;'>EXTRACTOR :" T "<p> </p>"}
+ addUserKnob {4 channels l " " -STARTLINE M {all}}
+ addUserKnob {26 spacer l <p> -STARTLINE T "    "}
+ addUserKnob {22 button l "<p>Extract Channels !!!</p>" -STARTLINE T "node = nuke.thisNode()\nUserValue = node\['channels'].value()\n\ndef MakeShuffle(name, source):\n    node = nuke.nodes.Shuffle(name=name, inputs=\[source])\n    node\['in'].setValue(name)\n    node\['postage_stamp'].setValue(True)\n    node\['label'].setValue('\\n'+ str(name.split(\"_\",3)\[-1]).upper())\n    node\['note_font'].setValue('Verdana Bold')\n    node\['note_font_color'].setValue(4294967295)\n\n    if name.split('_')\[2] == 'char':\n        node\['tile_color'].setValue(275742207)\n    elif name.split('_')\[2] == 'prop':\n        node\['tile_color'].setValue(2100760831)\n    elif name.split('_')\[2] == 'set':\n        node\['tile_color'].setValue(2098225919)\n\n\nif UserValue == 'all':\n    \n    channels = node\['channels'].values()\n    channels.remove('all')\n    removeList = \['_COMPOSITE_', '_EDGE_QC_']\n\n    for channel in channels:\n\n        name = channel.split(\".\")\[0]\n        if name not in removeList:\n            MakeShuffle(name, nuke.thisNode())\n            \nelse:\n    channel = node\['channels'].value()\n    MakeShuffle(channel, nuke.thisNode())"}
+ addUserKnob {26 _3 l "" +STARTLINE}
+ addUserKnob {26 info l " " T "<div style='width:10px;color:gray'>This node is made to import Roto Published directly from SG.\n<br>\nIt also contains an easy extractor that will create the proper\n<br>\nshuffle node for any alpha channel that are not in the RGBA.</div>"}
+}

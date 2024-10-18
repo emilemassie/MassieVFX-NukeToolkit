@@ -1,0 +1,29 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+StickyNote {
+ inputs 0
+ name latest_notes1
+ knobChanged "\nn = nuke.thisNode()\nk = nuke.thisKnob()\nif n\['filter'].getValue() == 2:\n    n\[\"tags\"].setVisible(True)\n    n\[\"filter_helper\"].setVisible(True)\nelse:\n    n\[\"tags\"].setVisible(False)\n    n\[\"filter_helper\"].setVisible(False)\n\n"
+ tile_color 0x191919ff
+ label "\[value notes]"
+ note_font Verdana
+ note_font_size 10
+ selected true
+ xpos -700
+ ypos 279
+ addUserKnob {20 NOTES}
+ addUserKnob {4 filter l "Filter :" -STARTLINE M {All "Paint & Roto" Custom "" ""}}
+ addUserKnob {22 Loadbnt l Load -STARTLINE T "import nuke\nfrom pixo_shotgun import shotgun\nfrom todo_sticky_note import utils\nfrom todo_sticky_note.constants import PXO_SHOT_SGID\nimport os\n\n\n#notes_node = nuke.toNode('latest_notes')\nnotes_node = nuke.thisNode()\n\ndef getNotes(shotgun, sgid):\n    filters = \[\[\"note_links\", \"in\", \{\"type\": 'Shot',\"id\": sgid\}]]\n    fields = utils.get_note_field_keys()\n    order = \[\{\"field_name\":  \"created_at\", \"direction\": \"desc\"\}]\n    return shotgun.find(\"Note\", filters, fields, order)\n\ndef sort_notes():\n    shot_sg_id = int(os.environ.get(PXO_SHOT_SGID))\n    all_notes = getNotes(shotgun.init_shotgun(), shot_sg_id)\n    #all_notes.reverse()\n    compiled_notes = \[]\n    keys = \[]\n\n    if notes_node\['filter'].getValue() == 0: # if selection is all\n        keys = \['','']\n    if notes_node\['filter'].getValue() == 1: # if selection is paint roto\n        keys = \['paint','roto','Paint','Roto']\n    if notes_node\['filter'].getValue() == 2: # if selection custom\n        keys = notes_node\['tags'].getValue().split()\n        print keys\n    \n    \n    \n    for note in all_notes:\n        adressed_to = ''\n        if any(i in note\['subject'] for i in keys) or any(i in note\['type'] for i in keys) or any(i in note\['content'] for i in keys):\n            for i in note\['addressings_to']:\n                adressed_to = adressed_to + str(i\['name']) \n    \n            formated_note = '<p style=\"text-align:right;\">'+str(note\['created_at'])+'</p><p><h1>' + note\['subject'] + '</h1>'+'<br><b>FROM : </b>' + note\['user']\['name']+'<br><b>TO: </b>' + adressed_to + '<br>---------------------------------------------------<br><br>' + note\['content'] + '</p>'\n            compiled_notes.append(formated_note)\n\n\n    return ''.join(compiled_notes\[0:int(notes_node\['nb_notes'].getValue())])\n\n\nnotes_node\['user_notes'].setValue(sort_notes())\n\n"}
+ addUserKnob {3 nb_notes l "the " -STARTLINE}
+ nb_notes 5
+ addUserKnob {26 text1 l " " -STARTLINE T "latest notes"}
+ addUserKnob {1 tags l "Keywords :" +HIDDEN}
+ tags brief
+ addUserKnob {26 filter_helper l " " +HIDDEN T "<i style='color:gray;'>Enter all keywords separated by one <b style='color:black; background-color:white;'>&nbsp;SPACE&nbsp;</b>\n\n<br>( Keywords are also <u style='color:white;'>case sensitive !</u> ) </i>\n<br>"}
+ addUserKnob {6 Hidecbx l "Hide notes ?" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {43 user_notes l "" +STARTLINE +INVISIBLE}
+ user_notes NOTES
+ addUserKnob {43 notes l "" +STARTLINE +INVISIBLE}
+ notes "\[if \{\[value this.Hidecbx]==false\} \{return \[value this.user_notes]\} \{return \"<center><br><i>HIDDEN BY THE USER<br>\"\}]"
+}

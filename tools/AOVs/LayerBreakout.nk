@@ -1,0 +1,11 @@
+set cut_paste_input [stack 0]
+version 14.0 v4
+push $cut_paste_input
+NoOp {
+ name LAYER_BREAKOUT
+ selected true
+ xpos -204
+ ypos -664
+ addUserKnob {20 User l Options}
+ addUserKnob {22 breakout_button l "<b style='font-size:12px;'>LAYER BREAKOUT" T "import nuke\n\ndef create_shuffles_for_layers(input_node):\n    # Get the list of layers from the input node\n    layers = nuke.layers(input_node)\n    \n    # Deselect all nodes\n    for node in nuke.allNodes():\n        node\['selected'].setValue(False)\n\n    # Loop through each layer and create a shuffle node\n    for layer in layers:\n        shuffle = nuke.createNode('Shuffle', inpanel=False)\n        shuffle.setInput(0, input_node)\n        shuffle\['in'].setValue(layer)\n        shuffle\['label'].setValue(layer)\n        shuffle\['postage_stamp'].setValue(True)\n        shuffle.setXpos(input_node.xpos()-50*(len(layers)+1) + 100 * (layers.index(layer) + 1))\n        shuffle.setYpos(input_node.ypos() + 100)\n\ncreate_shuffles_for_layers(nuke.thisNode())\n" +STARTLINE}
+}

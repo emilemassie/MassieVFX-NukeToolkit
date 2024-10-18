@@ -1,0 +1,17 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+PostageStamp {
+ knobChanged "\n\ndef updatename():\n\n    try :\n        \n        if nuke.thisNode().name() != '':\n            nuke.thisNode().knob('name').setValue('')\n        \n        label = \"<center><u style='font-size:10px'>Reading From:\\n\"\n        label += \"</u><b>\[value input.name]</b>\\n\"\n    \n        if nuke.thisNode().input(0).Class() == 'Read':\n            label = label + \"<i style='font-size:10px; padding-top:100;'>\[file tail \[value input.file]]\\n\[value input.label] \"\n    \n        label = label + '\[value input.label]'\n    \n        nuke.thisNode().knob('label').setValue(label)\n    except:\n        nuke.thisNode().knob('label').setValue(\"<center style='font-size:10px'>...Waiting for connection:\\n\")\n\nupdatename()\n\n"
+ label "<center style='font-size:10px'>...Waiting for connection:\n"
+ note_font Consolas
+ note_font_size 10
+ selected true
+ xpos -920
+ ypos 59
+ hide_input true
+ postage_stamp true
+ addUserKnob {20 iRead}
+ addUserKnob {22 PlateBtn l "Grab from PLATES" T "class getPlate(nukescripts.PythonPanel):\n    def __init__(self):\n        nukescripts.PythonPanel.__init__(self, 'Please select the PLATE you wish to refer to...')\n\n        self.plates = self.getPlatesList()\n        self.readList = nuke.Enumeration_Knob('readList', 'Connect To : ', self.plates\[1])\n        self.space = nuke.Text_Knob('')\n\n        self.addKnob(self.readList)\n        self.addKnob(self.space)\n    def getPlatesList(self):\n        listReads = \[\[],\[]]\n\n        for readnode in nuke.allNodes():\n            if readnode.Class() == 'Read':\n                if 'plate' in readnode.knob('file').getValue().split('/')\[-1]:\n                    listReads\[0].append(readnode.name())\n                    listReads\[1].append(str(readnode.name())+ ' --> ' + readnode.knob('file').getValue().split('/')\[-1])\n        return listReads\n\n\n\n    def connect(self):\n        nuke.thisNode().setInput(0, nuke.toNode(self.plates\[0]\[int(self.readList.getValue())]))\n        \n\n\n\np = getPlate()\nif p.showModalDialog():\n    p.connect()\n\n" +STARTLINE}
+ addUserKnob {22 rotoBnt l "Grab from ROTO" -STARTLINE T "class getPlate(nukescripts.PythonPanel):\n    def __init__(self):\n        nukescripts.PythonPanel.__init__(self, 'Please select the ROTO you wish to refer to...')\n\n        self.plates = self.getPlatesList()\n        self.readList = nuke.Enumeration_Knob('readList', 'Connect To : ', self.plates\[1])\n        self.space = nuke.Text_Knob('')\n\n        self.addKnob(self.readList)\n        self.addKnob(self.space)\n    def getPlatesList(self):\n        listReads = \[\[],\[]]\n\n        for readnode in nuke.allNodes():\n            if readnode.Class() == 'Read':\n                if 'roto' in readnode.knob('file').getValue().split('/')\[-1]:\n                    listReads\[0].append(readnode.name())\n                    listReads\[1].append(str(readnode.name())+ ' --> ' + readnode.knob('file').getValue().split('/')\[-1])\n        return listReads\n\n\n\n    def connect(self):\n        nuke.thisNode().setInput(0, nuke.toNode(self.plates\[0]\[int(self.readList.getValue())]))\n        \n\n\n\np = getPlate()\nif p.showModalDialog():\n    p.connect()\n\n"}
+}

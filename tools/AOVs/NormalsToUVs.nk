@@ -1,0 +1,233 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+Read {
+inputs 0
+file_type exr
+file Y:/matilda_mat-7695/mir/0170/elements/3d/lgt/BALLOONS/v007/fullres/beauty/mat_mir_0170_lgt_BALLOONS_v007_roj.beauty.%04d.exr
+localizationPolicy on
+format "4627 2603 0 0 4627 2603 1 Working format + 10% (REB_0885)"
+first 1001
+last 1260
+origfirst 1001
+origlast 1260
+origset true
+version 2
+name Read37
+tile_color 0x33cc66aa
+selected true
+xpos 3157
+ypos 8333
+cached true
+addUserKnob {20 User}
+addUserKnob {26 nuke_dependency_observer_divider_start l "Dependency Observing"}
+addUserKnob {4 nuke_dependency_observer_observing_policy l Policy t "Determine to perform dependency observing when loading a working file.\n\n<b>on:</b> Perform dependency observing\n.<b>off:</b> Do not perform dependency observing.\n" M {on off}}
+addUserKnob {22 nuke_dependency_observer_check l check t "Click to check if this node reads the latest version." -STARTLINE T "from nuke_dependency_observer import commands; commands.check(node=nuke.thisNode())"}
+addUserKnob {22 nuke_dependency_observer_update l update t "Click to update to the latest version on disk." -STARTLINE T "from nuke_dependency_observer import commands; commands.update(node=nuke.thisNode())"}
+addUserKnob {26 nuke_dependency_observer_divider_end l "" +STARTLINE}
+addUserKnob {22 reveal l "reveal in explorer" -STARTLINE T "from nuke_utils import reveal_in_explorer;reveal_in_explorer.reveal(nuke.thisNode())"}
+}
+set N19084800 [stack 0]
+Dot {
+name Dot203
+selected true
+xpos 3191
+ypos 8537
+}
+Dot {
+name Dot204
+selected true
+xpos 3191
+ypos 9065
+}
+Read {
+inputs 0
+file_type exr
+file Y:/matilda_mat-7695/mir/0170/elements/3d/lgt/BALLOONS/v007/fullres/N/mat_mir_0170_lgt_BALLOONS_v007_roj.N.####.exr
+localizationPolicy on
+first 1001
+last 1260
+origfirst 1001
+origlast 1260
+origset true
+on_error "nearest frame"
+version 101
+in_colorspace scene_linear
+out_colorspace scene_linear
+name Read_N
+selected true
+xpos 3377
+ypos 8241
+postage_stamp false
+addUserKnob {20 User}
+addUserKnob {22 reveal l "reveal in explorer" -STARTLINE T "from nuke_utils import reveal_in_explorer;reveal_in_explorer.reveal(nuke.thisNode())"}
+}
+set N19027400 [stack 0]
+Expression {
+temp_name0 h
+temp_expr0 -0.001
+expr0 r+h
+expr1 g+h
+expr2 b+h
+name Expression2
+selected true
+xpos 4360
+ypos 8327
+}
+Expression {
+temp_name0 f1
+temp_expr0 atan2(b,r)
+temp_name1 f2
+temp_expr1 asin(g)
+expr0 "b > 0 ? f1 : (2*pi) + f1"
+expr1 f2
+expr2 0
+name normal_to_radian2
+selected true
+xpos 4360
+ypos 8367
+}
+Expression {
+expr0 r/(2*pi)
+expr1 (g+(pi/2))/pi
+expr2 0
+name radian_to_UV2
+selected true
+xpos 4360
+ypos 8439
+}
+set N19026400 [stack 0]
+Read {
+inputs 0
+file_type exr
+file Y:/the-out-laws_olw-8223/_external/086_hdrmaps_com_free/086_hdrmaps_com_free.exr
+localizationPolicy on
+format "8192 4096 0 0 8192 4096 1 8K_LatLong"
+origset true
+name Read38
+tile_color 0x33cc66aa
+selected true
+xpos 3817
+ypos 8493
+cached true
+addUserKnob {20 User}
+addUserKnob {26 nuke_dependency_observer_divider_start l "Dependency Observing"}
+addUserKnob {4 nuke_dependency_observer_observing_policy l Policy t "Determine to perform dependency observing when loading a working file.\n\n<b>on:</b> Perform dependency observing\n.<b>off:</b> Do not perform dependency observing.\n" M {on off}}
+addUserKnob {22 nuke_dependency_observer_check l check t "Click to check if this node reads the latest version." -STARTLINE T "from nuke_dependency_observer import commands; commands.check(node=nuke.thisNode())"}
+addUserKnob {22 nuke_dependency_observer_update l update t "Click to update to the latest version on disk." -STARTLINE T "from nuke_dependency_observer import commands; commands.update(node=nuke.thisNode())"}
+addUserKnob {26 nuke_dependency_observer_divider_end l "" +STARTLINE}
+addUserKnob {22 reveal l "reveal in explorer" -STARTLINE T "from nuke_utils import reveal_in_explorer;reveal_in_explorer.reveal(nuke.thisNode())"}
+}
+STMap {
+inputs 2
+uv rgb
+name STMap4
+selected true
+xpos 3817
+ypos 8817
+}
+Grade {
+gamma 0.466
+name Grade49
+selected true
+xpos 3817
+ypos 8918
+}
+Dot {
+name Dot205
+selected true
+xpos 3851
+ypos 8969
+}
+push $N19027400
+push $N19084800
+add_layer {N N.red N.green N.blue N.alpha N.X N.Y N.Z}
+Copy {
+inputs 2
+from0 rgba.red
+to0 N.red
+from1 rgba.green
+to1 N.green
+from2 rgba.blue
+to2 N.blue
+bbox B
+name Copy_N
+selected true
+xpos 3377
+ypos 8624
+}
+set N19024c00 [stack 0]
+Merge2 {
+inputs 2
+operation plus
+name Merge102
+selected true
+xpos 3377
+ypos 8966
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy33
+selected true
+xpos 3377
+ypos 9056
+}
+Premult {
+name Premult28
+selected true
+xpos 3377
+ypos 9158
+}
+push $cut_paste_input
+BlinkScript {
+ProgramGroup 1
+KernelDescription "2 \"SaturationKernel\" iterate pixelWise a10c2ee9fa68b6d8bc94ac9e4472af3541cf7e35bafd37f204fa01cd0b601b2b 2 \"src\" Read Point \"dst\" Write Point 1 \"Saturation\" Float 1 mpmZPw== 1 \"saturation\" 1 1 1 \"coefficients\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+kernelSource "\nkernel SaturationKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    float saturation; // This parameter is made available to the user.\n\n  local:\n    float3 coefficients;  // This local variable is not exposed to the user.\n\n  // In define(), parameters can be given labels and default values.\n  void define() \{\n    defineParam(saturation, \"Saturation\", 1.2f);\n  \}\n\n  // The init() function is run before any calls to process().\n  // Local variables can be initialized here.\n  void init() \{\n    // Initialise coefficients according to rec. 709 standard.\n    coefficients.x = 0.2126f;\n    coefficients.y = 0.7152f;\n    coefficients.z = 0.0722f;\n  \}\n\n  void process() \{\n    // Read the input image\n    SampleType(src) input = src();\n\n    // Isolate the RGB components\n    float3 srcPixel(input.x, input.y, input.z);\n\n    // Calculate luma\n    float luma = srcPixel.x * coefficients.x\n               + srcPixel.y * coefficients.y\n               + srcPixel.z * coefficients.z;\n    // Apply saturation\n    float3 saturatedPixel = (srcPixel - luma) * saturation + luma;\n\n    // Write the result to the output image\n    dst() = float4(saturatedPixel.x, saturatedPixel.y, saturatedPixel.z, input.w);\n  \}\n\};\n"
+rebuild ""
+rebuild_finalise ""
+name BlinkScript2
+selected true
+xpos 2691
+ypos 9035
+}
+Dot {
+name Dot19
+selected true
+xpos 2725
+ypos 9143
+}
+push $N19024c00
+Shuffle2 {
+fromInput1 {{0} B}
+in1 {N.red N.green N.blue -N.alpha -N.X -N.Y -N.Z}
+fromInput2 {{0} B}
+mappings "4 N.red 0 0 rgba.red 0 0 N.green 0 1 rgba.green 0 1 N.blue 0 2 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+name Shuffle26
+label "\[value in] -&gt; \[value out]"
+selected true
+xpos 3597
+ypos 8631
+}
+push $N19026400
+Profile {
+frame_range 1001-1260
+need_reevaluation 1
+name Profile1
+selected true
+xpos 4580
+ypos 8495
+}
+push $N19027400
+BlinkScript {
+recompileCount 90
+ProgramGroup 1
+KernelDescription "2 \"NormalsDistort\" iterate pixelWise 79f181245486c0ff3c572841794286aa24118e44d7e8a285f2605d44f9556c7f 2 \"normals\" Read Point \"dst\" Write Point 1 \"Show UV : \" Bool 1 AQ== 1 \"showUV\" 1 1 2 \"processed_normals\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA== \"uv\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+kernelSource "kernel NormalsDistort : public ImageComputationKernel<ePixelWise>\n\{\n\n  Image<eRead, eAccessPoint, eEdgeClamped> normals;\n  Image<eWrite> dst;\n\nparam:\n  bool showUV;  //The radius of our box blur\n\nlocal:\n  float3 processed_normals;\n  float3 uv;\n  void define() \{\n    defineParam(showUV, \"Show UV : \", true); \n  \}\n\n  void init() \{\n  \}\n\n  void process() \{\n    float floor_offset = -0.001;\n    SampleType(normals) _normals = normals()+floor_offset;\n    //SampleType(src) input = src();\n\n    float FFA = atan2(_normals.z,_normals.x);\n    float FFB = asin(_normals.y);\n\n    // NORMALS TO RADIAN\n    if (_normals.z > 0.0f) \{\n      processed_normals.x = FFA;\n    \} else \{\n      processed_normals.x = (2*PI) + FFA;\n    \}\n    processed_normals.y = FFB;\n    processed_normals.z = 0.0f;\n\n    // RADIAN to UV\n\n    uv.x = processed_normals.x/(2*PI);\n    uv.y= (processed_normals.y+(PI/2))/PI;\n    uv.z = 0.0f;\n    \n    dst() = float4(uv.x, uv.y, uv.z, 0.0f);\n  \}\n\};"
+rebuild ""
+rebuild_finalise ""
+name NormalsToUV
+selected true
+xpos 4580
+ypos 8241
+}

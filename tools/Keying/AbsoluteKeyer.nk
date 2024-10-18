@@ -1,0 +1,67 @@
+set cut_paste_input [stack 0]
+version 13.0 v3
+push $cut_paste_input
+Group {
+ name AbsoluteKEY
+ tile_color 0xffffffff
+ note_font "Open Sans Light"
+ note_font_size 10
+ selected true
+ xpos -532
+ ypos -105
+ addUserKnob {20 TAB l CONTROLS}
+ addUserKnob {41 tolerance l "TOLERANCE :" T MergeExpression1.tolerance}
+ addUserKnob {26 ""}
+ addUserKnob {20 group l "     INFO :" n 1}
+ addUserKnob {26 INFOTEXT l " " T "<p>This node generates the <u>DIFFERENCE</u> between the inputs\n<br>into an <b>ABSOLUTE</b> alpha, meaning that pixels are either full <b style='color:white;background-color:black;'>WHITE</b> / <b style='color:black;background-color:white;'>BLACK</b>\n<br>(no feather, no ramp, no gray values).\n<br>\n<br>This is usefull when running regrains or when adding elements to a paintout. \n<br>It can also be used to double check witch area of the plate have been affected."}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Input1
+  selected true
+  xpos -40
+  ypos -514
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input2
+  xpos -260
+  ypos -514
+ }
+ MergeExpression {
+  inputs 2
+  channel0 alpha
+  expr0 "abs(Br-Ar) > tolerance || abs(Bg-Ag) > tolerance || abs(Bb-Ab)\n > tolerance? 1:0"
+  channel1 none
+  channel2 none
+  channel3 alpha
+  name MergeExpression1
+  xpos -260
+  ypos -372
+  addUserKnob {20 controls}
+  addUserKnob {7 tolerance l "TOLERANCE : " R 0 0.1}
+  tolerance 0.0001
+ }
+ Shuffle {
+  in alpha
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos -260
+  ypos -298
+ }
+ Clamp {
+  name Clamp1
+  xpos -260
+  ypos -232
+ }
+ Output {
+  name Output1
+  xpos -260
+  ypos -154
+ }
+end_group
